@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: sw2_db
+      POSTGRES_USER: sw2_user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - sw2_db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  web:
+    build: .
+    environment:
+      DATABASE_URL: postgres://sw2_user:password@db:5432/sw2_db
+      JWT_SECRET: supersecret
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+volumes:
+  sw2_db_data:
